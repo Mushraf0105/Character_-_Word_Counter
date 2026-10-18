@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Word & Character Counter</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Ambient background glow elements -->
+  <div class="glow-orb orb-1" aria-hidden="true"></div>
+  <div class="glow-orb orb-2" aria-hidden="true"></div>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <h1 class="app-title">Character & Word <span class="gradient-text">Counter</span></h1>
+      <p class="app-subtitle">Type or paste your text below to get instant counts, readability statistics, and text
+        formatting tools.</p>
+    </header>
+
+    <!-- Main Live Stat Cards Grid -->
+    <section class="stats-grid" aria-label="Text Statistics">
+      <div class="stat-card stat-words">
+        <div class="stat-icon-wrapper">
+          <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+          </svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">Words</span>
+          <span class="stat-value" id="wordCount">0</span>
+        </div>
+      </div>
+
+      <div class="stat-card stat-characters">
+        <div class="stat-icon-wrapper">
+          <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 7V4h16v3M9 20h6M12 4v16" />
+          </svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">Characters</span>
+          <span class="stat-value" id="charCount">0</span>
+        </div>
+      </div>
+
+      <div class="stat-card stat-sentences">
+        <div class="stat-icon-wrapper">
+          <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          </svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">Sentences</span>
+          <span class="stat-value" id="sentenceCount">0</span>
+        </div>
+      </div>
+
+      <div class="stat-card stat-paragraphs">
+        <div class="stat-icon-wrapper">
+          <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h10" />
+          </svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">Paragraphs</span>
+          <span class="stat-value" id="paragraphCount">0</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Editor Section -->
+    <main class="editor-card">
+      <!-- Toolbar -->
+      <div class="editor-toolbar">
+        <div class="toolbar-left">
+          <span class="toolbar-heading">Input Text</span>
+          <span class="live-indicator" id="typingStatus" title="Input status">Ready</span>
+        </div>
+        <div class="toolbar-actions">
+          <button type="button" class="btn-action" id="pasteBtn" title="Paste text from clipboard">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+            <span>Paste</span>
+          </button>
+
+          <button type="button" class="btn-action" id="sampleBtn" title="Load sample text">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            <span>Sample Text</span>
+          </button>
+
+          <button type="button" class="btn-action" id="copyBtn" title="Copy text to clipboard">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+            </svg>
+            <span id="copyBtnText">Copy</span>
+          </button>
+
+          <button type="button" class="btn-action btn-danger" id="clearBtn" title="Clear all text">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+            <span>Clear</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Textarea with Live Aria Support -->
+      <div class="textarea-wrapper">
+        <textarea id="textInput"
+          placeholder="Start typing or paste your content here... (Live character, word, and sentence counts will update as you type)"
+          aria-label="Text to analyze" spellcheck="true" rows="9"></textarea>
+      </div>
+
+      <!-- Quick Text Transform Pills -->
+      <div class="editor-footer">
+        <div class="tools-label">Quick Transforms:</div>
+        <div class="transform-buttons">
+          <button type="button" class="pill-btn" id="upperBtn" title="Convert to UPPERCASE">UPPERCASE</button>
+          <button type="button" class="pill-btn" id="lowerBtn" title="Convert to lowercase">lowercase</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Toast notification for actions -->
+    <div id="toast" class="toast" role="status" aria-live="polite">Text copied to clipboard!</div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
